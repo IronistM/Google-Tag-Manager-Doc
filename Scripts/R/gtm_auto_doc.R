@@ -53,7 +53,7 @@ tags.list <- function(accountId,containerId) {
 }
 
 account_versions.list <- function(accountId,containerId) {
-  url <- paste0("https://www.googleapis.com/tagmanager/v1/accounts/",accountId,"/containers/",containerId,"/versions?headers=true&includeDeleted=false&fields=containerVersion(name%2Cnotes)%2CcontainerVersionHeader")
+  url <- paste0("https://www.googleapis.com/tagmanager/v1/accounts/",accountId,"/containers/",containerId,"/versions/")
   # tagmanager.tags.list
   f <- gar_api_generator(url, "GET", data_parse_function = function(x) x)
   f()
@@ -88,6 +88,7 @@ for (acc_Id in accountId){
     container.tags <- tags.list(acc_Id,con_Id)
     container.triggers <- triggers.list(acc_Id,con_Id)
     container.variables <- variables.list(acc_Id,con_Id)
+    account_versions <- account_versions.list(acc_Id,con_Id)
     
     ## Parameter is a `JSON` (so in `R` this is a `list`), that we will not use for now
     # str(container.tags$tags$parameter)
@@ -96,6 +97,7 @@ for (acc_Id in accountId){
     tags <- container.tags$tags
     triggers <- container.triggers$triggers
     variables <- container.variables$variables
+    # versions <- account_versions
     
     ## Push it to a Google Sheet
     # require(googlesheets)
@@ -112,6 +114,7 @@ for (acc_Id in accountId){
     yo.tags <- gs_ws_new(ss=s_id, ws_title="Tags" , input = tags[,1:10], trim = TRUE)
     yo.triggers <- gs_ws_new(ss=s_id, ws_title="Triggers", input = triggers, trim = TRUE)
     yo.variables <- gs_ws_new(ss=s_id, ws_title="Variables", input = variables, trim = TRUE)
+    yo.versions <- gs_ws_new(ss=s_id, ws_title="Versions", input = variables, trim = TRUE)
     
     ## Share the spreadsheet via an email
     # require(mailR)
