@@ -52,6 +52,13 @@ tags.list <- function(accountId,containerId) {
   f()
 }
 
+account_versions.list <- function(accountId,containerId) {
+  url <- paste0("https://www.googleapis.com/tagmanager/v1/accounts/",accountId,"/containers/",containerId,"/versions?headers=true&includeDeleted=false&fields=containerVersion(name%2Cnotes)%2CcontainerVersionHeader")
+  # tagmanager.tags.list
+  f <- gar_api_generator(url, "GET", data_parse_function = function(x) x)
+  f()
+}
+                         
 containers.list <- function(accountId) {
   url <- paste0("https://www.googleapis.com/tagmanager/v1/accounts/",accountId,"/containers/")
   # tagmanager.tags.list
